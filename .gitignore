@@ -1,0 +1,27 @@
+# env / secrets
+.env
+**/.env
+.env.*
+**/.env.*
+
+# python
+__pycache__/
+*.pyc
+.venv/
+**/.venv/
+venv/
+**/venv/
+
+# node
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+
+# db / logs
+*.db
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

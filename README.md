@@ -358,13 +358,6 @@ parse → route → divination → narration → persist
 
 ---
 
-如果你需要，我可以继续补充：
-- 竞赛答辩用 PPT 文案
-- Demo 话术
-- 技术架构图（Mermaid / PNG）
-
----
-
 ## Flowchart
 
 ```mermaid

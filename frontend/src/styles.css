@@ -19,6 +19,7 @@
 body {
   margin: 0;
   font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: 18px;
   color: var(--ink);
   background: radial-gradient(circle at top, #fff6e5 0%, var(--bg-cream) 42%, var(--bg-warm) 100%);
   min-height: 100vh;
@@ -26,7 +27,7 @@ body {
 
 .app-shell {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 300px 1fr;
   min-height: 100vh;
   position: relative;
 }
@@ -40,12 +41,12 @@ body {
 }
 
 .sidebar {
-  padding: 28px 20px;
+  padding: 32px 24px;
   background: linear-gradient(180deg, #f4e7d8 0%, #ead8c4 100%);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .brand {
@@ -56,12 +57,12 @@ body {
 
 .brand-title {
   font-family: "ZCOOL XiaoWei", serif;
-  font-size: 28px;
+  font-size: 34px;
   letter-spacing: 2px;
 }
 
 .brand-sub {
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   color: var(--ink-soft);
   letter-spacing: 1px;
@@ -99,7 +100,7 @@ body {
 .session-item {
   border: 1px solid transparent;
   background: #fff5e8;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 12px;
   cursor: pointer;
   text-align: left;
@@ -119,28 +120,28 @@ body {
 }
 
 .session-time {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
 }
 
 .chat-panel {
   display: flex;
   flex-direction: column;
-  padding: 28px 36px 24px;
-  gap: 20px;
+  padding: 34px 44px 28px;
+  gap: 24px;
 }
 
 .chat-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 .chat-header h1 {
   font-family: "ZCOOL XiaoWei", serif;
   margin: 0 0 6px;
-  font-size: 26px;
+  font-size: 32px;
 }
 
 .chat-header p {
@@ -153,7 +154,7 @@ body {
   color: var(--accent-warm);
   padding: 8px 14px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   border: 1px solid #f0c9ab;
 }
 
@@ -163,7 +164,8 @@ body {
   padding-right: 6px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+  padding-bottom: 220px;
 }
 
 .empty-state {
@@ -181,8 +183,8 @@ body {
 }
 
 .bubble {
-  max-width: min(620px, 100%);
-  padding: 16px 18px;
+  max-width: min(680px, 100%);
+  padding: 20px 22px;
   border-radius: 18px;
   background: var(--card);
   border: 1px solid var(--border);
@@ -196,7 +198,7 @@ body {
 }
 
 .meta {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   margin-bottom: 6px;
 }
@@ -246,7 +248,7 @@ body {
   background: #f9f3ea;
   padding: 12px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 13px;
   max-height: 200px;
   overflow: auto;
 }
@@ -259,14 +261,55 @@ body {
   gap: 12px;
 }
 
+.composer.floating {
+  position: fixed;
+  left: 320px;
+  right: 44px;
+  bottom: 28px;
+  padding: 16px;
+  background: rgba(255, 249, 241, 0.98);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 18px 32px rgba(46, 42, 37, 0.18);
+  backdrop-filter: blur(6px);
+  border-top: none;
+}
+
+.composer-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.ghost-btn {
+  border: 1px solid var(--border);
+  background: #fff6eb;
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.ghost-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ghost-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #e6f6f4;
+}
+
 .composer textarea {
   resize: none;
   border-radius: 14px;
   border: 1px solid var(--border);
-  padding: 12px 14px;
+  padding: 14px 16px;
   font-family: inherit;
   font-size: 14px;
-  min-height: 90px;
+  min-height: 110px;
   background: #fff;
 }
 
@@ -277,7 +320,7 @@ body {
 }
 
 .hint {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
 }
 
@@ -293,6 +336,7 @@ body {
 }
 
 @media (max-width: 900px) {
+
   .app-shell {
     grid-template-columns: 1fr;
   }
@@ -310,20 +354,10 @@ body {
   .chat-panel {
     padding: 20px;
   }
-}
-.toggle-btn {
-  border: 1px solid var(--border);
-  background: #fff6eb;
-  color: var(--ink);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
-}
 
-.toggle-btn.active {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: #e6f6f4;
+  .composer.floating {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
 }

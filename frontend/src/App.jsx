@@ -23,7 +23,6 @@ export default function App() {
   });
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const [forceDivination, setForceDivination] = useState(false);
   const listRef = useRef(null);
 
   const activeMessages = messagesBySession[activeSessionId] || [];
@@ -57,7 +56,7 @@ export default function App() {
     }));
   };
 
-  const sendMessage = async () => {
+  const sendMessage = async (forceDivination = false) => {
     const content = input.trim();
     if (!content || isSending) return;
 
@@ -102,7 +101,7 @@ export default function App() {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      sendMessage();
+      sendMessage(false);
     }
   };
 
@@ -189,7 +188,7 @@ export default function App() {
           )}
         </section>
 
-        <section className="composer">
+        <section className="composer floating">
           <textarea
             value={input}
             onChange={(event) => setInput(event.target.value)}
@@ -198,17 +197,15 @@ export default function App() {
             rows={3}
           />
           <div className="composer-actions">
-            <button
-              className={`toggle-btn ${forceDivination ? "active" : ""}`}
-              onClick={() => setForceDivination((prev) => !prev)}
-              type="button"
-            >
-              {forceDivination ? "占卜模式：开" : "占卜模式：关"}
-            </button>
             <span className="hint">Shift + Enter 换行</span>
-            <button className="primary-btn" onClick={sendMessage} disabled={isSending}>
-              {isSending ? "占卜中..." : "发送"}
-            </button>
+            <div className="composer-buttons">
+              <button className="ghost-btn" onClick={() => sendMessage(false)} disabled={isSending}>
+                发送
+              </button>
+              <button className="primary-btn" onClick={() => sendMessage(true)} disabled={isSending}>
+                占卜
+              </button>
+            </div>
           </div>
         </section>
       </main>

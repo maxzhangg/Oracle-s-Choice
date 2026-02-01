@@ -4,6 +4,15 @@ A SpoonOS Graph Agent–powered oracle app that can **chat empathetically** or *
 
 ---
 
+## Screenshots
+
+![start](photos/start.png)
+
+![eat](photos/eat.png)
+
+![exam](photos/exam.png)
+
+
 ## ✨ Features
 
 - **Dual mode**: normal chat (contextual) or forced divination.
@@ -31,7 +40,7 @@ parse (LLM) → route (LLM) → divination (local) → narration (LLM) → persi
 
 ### Frontend workflow
 - User enters prompt
-- Optional **占卜模式** toggle
+- Optional **Divination** button
 - Sends `force_divination` flag to backend
 - Renders response + optional trace + structured result
 
@@ -154,7 +163,7 @@ npm run dev
 - LLM decides if this is a chat or divination request.
 
 ### Force Divination
-- Click **占卜模式：开** in UI.
+- Click **Divination** in UI.
 - Forces divination flow regardless of intent.
 
 ### Context Handling
@@ -297,8 +306,8 @@ MIT or project default (update if needed).
 ## 3) 用户体验设计
 
 ### 3.1 占卜按钮
-- **关**：自动判断
-- **开**：强制占卜
+- **Send**: auto decide
+- **Divination**: force divination
 
 ### 3.2 透明决策过程
 每次对话都会返回 Agent trace，可展开查看：
@@ -353,3 +362,20 @@ parse → route → divination → narration → persist
 - 竞赛答辩用 PPT 文案
 - Demo 话术
 - 技术架构图（Mermaid / PNG）
+
+---
+
+## Flowchart
+
+```mermaid
+flowchart LR
+  A[User Input] --> B[parse\nLLM: intent/domain/tone]
+  B --> C[route\nLLM: choose tool]
+  C --> D{intent = chat?}
+  D -- yes --> E[narration\nLLM: last 5 messages]
+  D -- no --> F[divination\nlocal draw]
+  F --> G[narration\nLLM: explanation]
+  E --> H[persist\nSQLite]
+  G --> H
+  H --> I[Response + Trace]
+```

@@ -51,7 +51,7 @@ TRACE_ORDER = ["parse", "route", "divination", "narration", "persist"]
 
 
 def build_agent(storage: Storage):
-    llm_client = LLMClient(providers=["gemini", "openai"])
+    llm_client = LLMClient(providers=["deepseek"])
 
     async def parse_node(state: WorkflowState) -> Dict[str, Any]:
         input_snapshot = _trace_snapshot(state)
@@ -80,6 +80,7 @@ def build_agent(storage: Storage):
         ]
 
         payload = await llm_client.chat_json(messages, fallback=fallback)
+        provider_used = payload.get("_provider") if isinstance(payload, dict) else None
         intent = payload.get("intent", fallback_intent)
         if force_divination:
             intent = "divination"
@@ -95,6 +96,8 @@ def build_agent(storage: Storage):
             "tone": tone,
             "need_clarification": bool(need_clarification),
         }
+        if provider_used:
+            output["llm_provider"] = provider_used
         return _with_trace(state, "parse", input_snapshot, output, "ok")
 
     async def route_node(state: WorkflowState) -> Dict[str, Any]:
@@ -128,11 +131,15 @@ def build_agent(storage: Storage):
         ]
 
         payload = await llm_client.chat_json(messages, fallback={"tool": fallback_tool})
+        provider_used = payload.get("_provider") if isinstance(payload, dict) else None
         tool = payload.get("tool") if isinstance(payload, dict) else None
         if tool not in {"tarot", "lenormand", "liuyao"}:
             tool = fallback_tool
 
-        return _with_trace(state, "route", input_snapshot, {"tool": tool}, "ok")
+        output = {"tool": tool}
+        if provider_used:
+            output["llm_provider"] = provider_used
+        return _with_trace(state, "route", input_snapshot, output, "ok")
 
     async def divination_node(state: WorkflowState) -> Dict[str, Any]:
         input_snapshot = _trace_snapshot(state)
@@ -213,11 +220,22 @@ def build_agent(storage: Storage):
             ]
 
         payload = await llm_client.chat_json(messages, fallback={})
+        provider_used = payload.get("_provider") if isinstance(payload, dict) else None
         message = payload.get("message") if isinstance(payload, dict) else None
+        if not message and isinstance(payload, dict):
+            raw = payload.get("_raw")
+            if isinstance(raw, str) and raw.strip():
+                message = raw.strip()
         if not message:
-            message = fallback_narration(tool, verdict, advice, tone, need_clarification)
+            if intent == "chat":
+                message = "我在这里听你说。可以多告诉我一些你的感受或发生了什么吗？"
+            else:
+                message = fallback_narration(tool, verdict, advice, tone, need_clarification)
 
-        return _with_trace(state, "narration", input_snapshot, {"message": message}, "ok")
+        output = {"message": message}
+        if provider_used:
+            output["llm_provider"] = provider_used
+        return _with_trace(state, "narration", input_snapshot, output, "ok")
 
     async def persist_node(state: WorkflowState) -> Dict[str, Any]:
         input_snapshot = _trace_snapshot(state)
